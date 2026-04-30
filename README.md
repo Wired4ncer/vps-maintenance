@@ -84,22 +84,25 @@ bash vps_maintenance.sh --no-color
 
 ## Deploying to a server
 
-```bash
-# Copy to the server
-scp vps_maintenance.sh user@your-vps-ip:/usr/local/sbin/vps_maintenance.sh
+The easiest way is a single curl command run directly on the VPS -- no cloning required:
 
-# Make executable
-ssh user@your-vps-ip "chmod +x /usr/local/sbin/vps_maintenance.sh"
+```bash
+sudo curl -fsSL https://raw.githubusercontent.com/Wired4ncer/vps-maintenance/main/vps_maintenance.sh -o /usr/local/sbin/vps_maintenance.sh && sudo chmod +x /usr/local/sbin/vps_maintenance.sh
 ```
 
-For multiple servers at once:
+To deploy or update all your servers at once from your local machine:
 
 ```bash
-for VPS in vps1.example.com vps2.example.com vps3.example.com; do
+for VPS in user@vps1.example.com user@vps2.example.com user@vps3.example.com; do
     echo ">>> Deploying to $VPS"
-    scp vps_maintenance.sh user@$VPS:/usr/local/sbin/vps_maintenance.sh
-    ssh user@$VPS "chmod +x /usr/local/sbin/vps_maintenance.sh"
+    ssh $VPS "sudo curl -fsSL https://raw.githubusercontent.com/Wired4ncer/vps-maintenance/main/vps_maintenance.sh -o /usr/local/sbin/vps_maintenance.sh && sudo chmod +x /usr/local/sbin/vps_maintenance.sh"
 done
+```
+
+To pin to a specific commit instead of always pulling the latest from main:
+
+```bash
+sudo curl -fsSL https://raw.githubusercontent.com/Wired4ncer/vps-maintenance/COMMIT_HASH/vps_maintenance.sh -o /usr/local/sbin/vps_maintenance.sh && sudo chmod +x /usr/local/sbin/vps_maintenance.sh
 ```
 
 ---
