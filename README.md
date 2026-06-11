@@ -56,7 +56,7 @@ The script runs 8 stages in sequence:
 - Verifies `certbot.timer` is active (auto-renewal enabled)
 - Runs `certbot renew --dry-run` to confirm renewals would succeed
 - Shows days remaining for every managed certificate — warns under 30 days, errors if expired
-- Falls back to scanning `/etc/nginx/ssl/`, `/etc/apache2/ssl/` with `openssl` if certbot is not installed
+- Falls back to scanning `/etc/nginx/ssl/`, `/etc/apache2/ssl/`, and `/etc/ssl/certs/` with `openssl` if certbot is not installed
 
 ### 7. Health Snapshot (after)
 - Disk usage across all partitions post-cleanup
