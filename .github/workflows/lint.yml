@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Syntax check (bash -n)
+        run: bash -n vps_maintenance.sh
+
+      - name: Guard against duplicated script body
+        # The file was accidentally committed twice end-to-end in the past,
+        # which fused `fi` with a second shebang and broke parsing. Fail loudly
+        # if more than one shebang ever shows up again.
+        run: |
+          count=$(grep -c '^#!/usr/bin/env bash' vps_maintenance.sh || true)
+          if [ "$count" -ne 1 ]; then
+            echo "::error file=vps_maintenance.sh::Expected exactly 1 shebang, found $count -- the script body looks duplicated."
+            exit 1
+          fi
+
+      - name: ShellCheck
+        # shellcheck is preinstalled on ubuntu-latest runners.
+        run: shellcheck --severity=warning vps_maintenance.sh
